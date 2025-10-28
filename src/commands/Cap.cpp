@@ -6,7 +6,7 @@
 /*   By: tambinin <tambinin@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 22:41:24 by tambinin          #+#    #+#             */
-/*   Updated: 2025/10/26 16:04:47 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/27 07:11:55 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	Cap::execute(Client* client, const std::vector<std::string>& params)
 	{
 		if (params[0] == "LS")
 		{
-			std::string	answer = ":ircserver CAP * LS :\r\n";
+			std::string	answer = ":ircserv CAP * LS :\r\n";
 			_server->sendMessageToClient(client, answer);
 		}
 		else if (params[0] == "END")

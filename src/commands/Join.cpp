@@ -6,7 +6,7 @@
 /*   By: tambinin <tambinin@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 23:35:46 by tambinin          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:02 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:51:58 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,9 @@ void	Join::execute(Client *client, const std::vector<std::string> &params)
 			client->_nickname + " " + channel_name + " :No topic is set\r\n";
 		_server->sendMessageToClient(client, no_topic_msg);
 	}
-	std::vector<Client *>	members = channel->getClients();
-	std::string	list_names = "";
-	for (size_t i = 0; i < members.size(); ++i)
+	//std::vector<Client *>	members = channel->getClients();
+	std::string	list_names = channel->getUserList();
+	/*for (size_t i = 0; i < members.size(); ++i)
 	{
 		if (i == 0)
 			channel->addOperator(members[i]);
@@ -139,7 +139,7 @@ void	Join::execute(Client *client, const std::vector<std::string> &params)
 		list_names += members[i]->_nickname;
 		if (i < members.size() - 1)
 			list_names += " ";
-	}
+	}*/
 	std::string	name_msg = ":ircserv " + intToString(RPL_NAMREPLY) + " " +
 		client->_nickname + " = " + channel_name + " :" + list_names + "\r\n";
 	_server->sendMessageToClient(client, name_msg);

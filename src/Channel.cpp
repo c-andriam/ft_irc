@@ -6,7 +6,7 @@
 /*   By: candriam <candriam@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 00:32:59 by candriam          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:33 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:37:53 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ const std::string&	Channel::getName() const
 	return (this->_name);
 }
 
-std::string	Channel::getTopic() const
+const std::string&	Channel::getTopic() const
 {
 	return (this->_topic);
 }
 
-std::vector<Client*>	Channel::getClients() const
+const std::vector<Client*>&	Channel::getClients() const
 {
 	return (_clients);
 }
@@ -88,7 +88,7 @@ bool	Channel::hasKey() const
 	return (hasMode('k'));
 }
 
-std::string	Channel::getKey() const
+const std::string&	Channel::getKey() const
 {
 	return (getModeParam('k'));
 }
@@ -153,7 +153,10 @@ bool	Channel::addClient( Client* client )
 {
 	if (!isClientInChannel(client))
 	{
+		bool	is_first = _clients.empty();
 		_clients.push_back(client);
+		if (is_first)
+			addOperator(client);
 		return (true);
 	}
 	return (false);
@@ -165,6 +168,7 @@ bool	Channel::removeClient( Client* client )
 	{
 		std::vector<Client*>::iterator it = std::remove(_clients.begin(), _clients.end(), client);
 		_clients.erase(it, _clients.end());
+		removeOperator(client);
 		return (true);
 	}
 	return (false);
@@ -215,7 +219,7 @@ void	Channel::broadcastMessage( const std::string& message, Client* sender )
 {
 	for (std::vector<Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
-		if (*it != sender)
+		if (sender == NULL || *it != sender)
 		{
 			_server->sendMessageToClient(*it, message);
 		}

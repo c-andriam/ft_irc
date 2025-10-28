@@ -6,7 +6,7 @@
 /*   By: tambinin <tambinin@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 22:10:03 by tambinin          #+#    #+#             */
-/*   Updated: 2025/10/26 16:04:54 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/27 08:21:49 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ std::string	CommandHandler::getCommandString(IRCCommands cmdEnum)
 			return ("KICK");
 		case INVITE_COMMAND:
 			return ("INVITE");
+		case DCC_COMMAND:
+			return ("DCC");
 		default:
 			return ("Not a valid command");
 	}
@@ -102,21 +104,21 @@ void	CommandHandler::handleUnknownCommand(Client* client, const std::string& cmd
 {
 	int index = _server->getClientIndex(client);
 	if (index != -1)
-		_server->sendErrorMessage(index, ERR_UNKNOWNCOMMAND, cmd, ":Unknown command");
+		_server->sendErrorMessage(index, ERR_UNKNOWNCOMMAND, cmd, " :Unknown command");
 }
 
 void	CommandHandler::handleNotEnoughParams(Client* client, const std::string& cmd)
 {
 	int index = _server->getClientIndex(client);
 	if (index != -1)
-		_server->sendErrorMessage(index, ERR_NEEDMOREPARAMS, cmd, ":Not enough parameters");
+		_server->sendErrorMessage(index, ERR_NEEDMOREPARAMS, cmd, " :Not enough parameters");
 }
 
 void	CommandHandler::handleNotRegistered(Client* client)
 {
 	int index = _server->getClientIndex(client);
 	if (index != -1)
-		_server->sendErrorMessage(index, ERR_NOTREGISTERED, "", ":You have not registered");
+		_server->sendErrorMessage(index, ERR_NOTREGISTERED, "", " :You have not registered");
 }
 
 IRCCommands	CommandHandler::getCommandEnum(const std::string& command)
@@ -146,5 +148,7 @@ IRCCommands	CommandHandler::getCommandEnum(const std::string& command)
 		return (KICK_COMMAND);
 	if (upper == "INVITE")
 		return (INVITE_COMMAND);
+	if (upper == "DCC")
+		return (DCC_COMMAND);
 	return (IRCCommands)0;
 }

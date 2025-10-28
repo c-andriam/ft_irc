@@ -26,7 +26,7 @@ void	Reply::initReplyFormats()
 		return ;
 	Reply::ReplyFormat format;
 	format.code = RPL_WELCOME;
-	format.format = ":Welcome to the IRC %s";
+	format.format = " :Welcome to the IRC %s";
 	_reply_formats.push_back(format);
 	format.code = ERR_UNKNOWNCOMMAND;
 	format.format = "%s :Unknown command";
@@ -38,7 +38,7 @@ void	Reply::initReplyFormats()
 	format.format = "%s :Not enough parameters";
 	_reply_formats.push_back(format);
 	format.code = ERR_NOTREGISTERED;
-	format.format = ":You have not registred";
+	format.format = " :You have not registred";
 	_reply_formats.push_back(format);
 	_initialized = true;
 }

@@ -6,7 +6,7 @@
 /*   By: tambinin <tambinin@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 22:41:24 by tambinin          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:15 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/27 07:06:07 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	Pass::execute(Client *client, const std::vector<std::string> &params)
 {
 	if (client->_pass_sent)
 	{
-		std::string msg = ":server " + intToString(ERR_ALREADYREGISTERED);
+		std::string msg = ":ircserv " + intToString(ERR_ALREADYREGISTERED) + " ";
 		if (!client->_nickname.empty())
 			msg += client->_nickname;
 		else
@@ -41,7 +41,7 @@ void	Pass::execute(Client *client, const std::vector<std::string> &params)
 	}
 	if (params.empty())
 	{
-		std::string msg = ":server " + intToString(ERR_NEEDMOREPARAMS) +
+		std::string msg = ":ircserv " + intToString(ERR_NEEDMOREPARAMS) +
 			" * PASS :Not enough paramaters\r\n";
 		_server->sendMessageToClient(client, msg);
 		return ;

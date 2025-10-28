@@ -6,7 +6,7 @@
 /*   By: tambinin <tambinin@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 23:38:57 by tambinin          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:12 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/27 07:14:58 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	Nick::execute(Client *client, const std::vector<std::string> &params)
 	if (params.empty())
 	{
 		client->_auth_error_code = ERR_NONICKNAMEGIVEN;
-		client->_auth_error_msg = ":No nickname given";
+		client->_auth_error_msg = " :No nickname given";
 		client->_nickname = "*";
 		return ;
 	}
@@ -112,7 +112,7 @@ void	Nick::execute(Client *client, const std::vector<std::string> &params)
 	{
 		if (!client->_pass_sent)
 		{
-			std::string msg = ":server " + intToString(ERR_PASSWDMISMATCH) +
+			std::string msg = ":ircserv " + intToString(ERR_PASSWDMISMATCH) +
 				" * :Password required\r\nERROR :Closing Link\r\n";
 			_server->sendMessageImmediately(client, msg);
 			usleep(100000);
@@ -123,7 +123,7 @@ void	Nick::execute(Client *client, const std::vector<std::string> &params)
 		}
 		if (client->_bad_password)
 		{
-			std::string msg = ":server " + intToString(ERR_PASSWDMISMATCH) +
+			std::string msg = ":ircserv " + intToString(ERR_PASSWDMISMATCH) +
 				" * :Password must be sent first\r\nERROR :Closing Link\r\n";
 			_server->sendMessageImmediately(client, msg);
 			usleep(100000);
@@ -134,7 +134,7 @@ void	Nick::execute(Client *client, const std::vector<std::string> &params)
 		}
 		if (!client->_is_password)
 		{
-			std::string msg = ":server " + intToString(ERR_PASSWDMISMATCH) +
+			std::string msg = ":ircserv " + intToString(ERR_PASSWDMISMATCH) +
 				" * :Password incorrect\r\nERROR :Closing Link\r\n";
 			_server->sendMessageImmediately(client, msg);
 			usleep(100000);
@@ -145,7 +145,7 @@ void	Nick::execute(Client *client, const std::vector<std::string> &params)
 		}
 		if (client->_auth_error_code != 0)
 		{
-			std::string msg = ":server " + intToString(client->_auth_error_code) +
+			std::string msg = ":ircserv " + intToString(client->_auth_error_code) +
 				" * " + client->_auth_error_msg + "\r\n";
 			_server->sendMessageToClient(client, msg);
 			return ;

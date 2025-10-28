@@ -6,7 +6,7 @@
 /*   By: tambinin <tambinin@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 23:42:51 by tambinin          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:27 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:47:37 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,6 @@ void	Topic::execute(Client *client, const std::vector<std::string> &params)
 		return ;
 	}
 	std::string	new_topic = params[1];
-	if (!new_topic.empty() && new_topic[0] == ':')
-		new_topic = new_topic.substr(1);
 	ch->setTopic(new_topic);
 	std::string topic_msg = ":" + client->_nickname + "!" + client->_username +
 		"@" + client->getHost() + " TOPIC " + channel_name +

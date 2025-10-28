@@ -6,7 +6,7 @@
 /*   By: tambinin <tambinin@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 23:37:30 by tambinin          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:09 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:43:01 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,44 +204,46 @@ void	Mode::execute(Client *client, const std::vector<std::string> &params)
 				}
 				break;
 			case 'o':
-				if (argIndex >= params.size())
 				{
-					if (index != -1)
-						_server->sendErrorMessage(index, ERR_NEEDMOREPARAMS, "MODE",
-								" :Not enough parameters");
-					break;
-				}
-				Client *targetUser = _server->getClientByNick(params[argIndex]);
-				if (!targetUser)
-				{
-					if (index != -1)
-						_server->sendErrorMessage(index, ERR_NOSUCHNICK, "MODE",
-								params[argIndex] + " :No such nick");
-					break;
-				}
-				if (!ch->isClientInChannel(targetUser))
-				{
-					if (index != -1)
-						_server->sendErrorMessage(index, ERR_USERNOTINCHANNEL, "MODE",
+					if (argIndex >= params.size())
+					{
+						if (index != -1)
+							_server->sendErrorMessage(index, ERR_NEEDMOREPARAMS, "MODE",
+									" :Not enough parameters");
+						break;
+					}
+					Client *targetUser = _server->getClientByNick(params[argIndex]);
+					if (!targetUser)
+					{
+						if (index != -1)
+							_server->sendErrorMessage(index, ERR_NOSUCHNICK, "MODE",
+									params[argIndex] + " :No such nick");
+						break;
+					}
+					if (!ch->isClientInChannel(targetUser))
+					{
+						if (index != -1)
+							_server->sendErrorMessage(index, ERR_USERNOTINCHANNEL, "MODE",
 								params[argIndex] + " " + target +
-								" :They aren't on that channel");
+									" :They aren't on that channel");
+						break;
+					}
+					if (adding)
+					{
+						ch->addOperator(targetUser);
+						currentModeString += c;
+						appliedParams.push_back(params[argIndex]);
+					}
+					else
+					{
+						ch->removeOperator(targetUser);
+						currentModeString += c;
+						appliedParams.push_back(params[argIndex]);
+					}
+					argIndex++;
 					break;
 				}
-				if (adding)
-				{
-					ch->addOperator(targetUser);
-					currentModeString += c;
-					appliedParams.push_back(params[argIndex]);
-				}
-				else
-				{
-					ch->removeOperator(targetUser);
-					currentModeString += c;
-					appliedParams.push_back(params[argIndex]);
-				}
-				argIndex++;
 		}
-		break;
     }
 	if (!currentModeString.empty())
 	{

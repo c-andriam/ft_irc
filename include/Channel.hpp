@@ -6,7 +6,7 @@
 /*   By: candriam <candriam@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 23:54:51 by candriam          #+#    #+#             */
-/*   Updated: 2025/10/26 16:04:16 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:55:35 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ class	Channel
 		~Channel();
 
 		const std::string&			getName() const;
-		std::string					getTopic() const;
-		std::vector<Client*>		getClients() const;
+		const std::string&			getTopic() const;
+		const std::vector<Client*>&	getClients() const;
 
 		bool						hasMode( char mode ) const;
 		const std::string&			getModeParam( char mode ) const;
@@ -44,7 +44,7 @@ class	Channel
 		bool						isValidMode( char mode ) const;
 
 		bool						hasKey() const;
-		std::string					getKey() const;
+		const std::string&			getKey() const;
 		bool						isInviteOnly() const;
 		bool						isInvited(Client* client) const;
 		bool						hasUserLimit() const;

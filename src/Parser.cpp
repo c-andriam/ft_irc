@@ -6,7 +6,7 @@
 /*   By: candriam <candriam@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 07:00:10 by candriam          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:50 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:44:19 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ bool	Parser::parseParameterList( std::string& cmd, std::vector<std::string>& par
 			break ;
 		if (cmd[pos] == ':')
 		{
-			parameters.push_back(cmd.substr(pos));
+			parameters.push_back(cmd.substr(pos + 1));
 			break ;
 		}
 		std::size_t	end = cmd.find(' ', pos);

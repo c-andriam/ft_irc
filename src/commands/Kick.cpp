@@ -6,7 +6,7 @@
 /*   By: tambinin <tambinin@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 23:36:16 by tambinin          #+#    #+#             */
-/*   Updated: 2025/10/26 16:37:16 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:29:45 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,12 @@ void	Kick::execute(Client* client, const std::vector<std::string>& params)
 	{
 		comment = client->_nickname;
 	}
-	ch->removeClient(target_user);
 	std::ostringstream oss;
 	oss << ":" << client->_nickname << "!" << client->_username << "@"
 			<< client->getHost() << " KICK " << target_channel << " " << params[1] << " :" << comment << "\r\n";
 	std::string kick_msg = oss.str();
-	_server->sendMessageToClient(client, kick_msg);
-	ch->broadcastMessage(kick_msg, client);
-	_server->sendMessageToClient(target_user, kick_msg);
+	//_server->sendMessageToClient(client, kick_msg);
+	ch->broadcastMessage(kick_msg, NULL);
+	ch->removeClient(target_user);
+	//_server->sendMessageToClient(target_user, kick_msg);
 }

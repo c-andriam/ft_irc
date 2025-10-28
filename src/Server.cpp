@@ -6,7 +6,7 @@
 /*   By: candriam <candriam@student.42antananarivo  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 19:04:01 by candriam          #+#    #+#             */
-/*   Updated: 2025/10/26 16:05:58 by candriam         ###   ########.fr       */
+/*   Updated: 2025/10/27 07:01:56 by candriam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 #include "../include/commands/Privmsg.hpp"
 #include "../include/commands/Topic.hpp"
 #include "../include/commands/User.hpp"
+#include "../include/commands/Dcc.hpp"
 #include <arpa/inet.h>
 #include <asm-generic/socket.h>
 #include <cerrno>
@@ -118,6 +119,7 @@ void	Server::registerAllCommands()
 	_commandHandler->registerCommand(PING_COMMAND, new Ping(this));
 	_commandHandler->registerCommand(PONG_COMMAND, new Pong(this));
 	_commandHandler->registerCommand(CAP_COMMAND, new Cap(this));
+	_commandHandler->registerCommand(DCC_COMMAND, new Dcc(this));
 }
 
 void	Server::cleanupCommandHandler()
@@ -340,7 +342,7 @@ void	Server::rejectConnection(int client_fd, const std::string &reason)
 {
 	std::cerr << "Rejecting conection fd=" << client_fd << ": " << reason
 		<< std::endl;
-	std::string error_msg = "Error :Server unavailable: " + reason + "\r\n";
+	std::string error_msg = "Error :ircserv unavailable: " + reason + "\r\n";
 	send(client_fd, error_msg.c_str(), error_msg.size(), 0);
 	close(client_fd);
 }
@@ -370,7 +372,7 @@ IRCErrorCode	Server::handlePoll()
 
 void	Server::sendErrorMessage(int i, int error_code, const std::string &cmd_name, const std::string &msg)
 {
-	std::string error_msg = ":ircserver " + intToString(error_code) + " " +
+	std::string error_msg = ":ircserv " + intToString(error_code) + " " +
 		clients[i]._nickname + " " + cmd_name + " " + msg + "\r\n";
 	clients[i].out_buffer += error_msg;
 	pollfds[i].events |= POLLOUT;
@@ -763,7 +765,7 @@ void	Server::sendPingToAllClients()
 			oss << timestamp;
 			std::string token = oss.str();
 			std::string ping_msg = ":ircserv PING :" + token + "\r\n";
-			sendMessageToClient(&clients[i], ping_msg);
+			//sendMessageToClient(&clients[i], ping_msg);
 			clients[i]._expected_pong_token = token;
 			std::cout << "PING sent to " << clients[i].getNick() << std::endl;
 		}
@@ -890,7 +892,7 @@ void	Server::removeClientFromAllChannels(Client *client)
 
 void Server::stop()
 {
-	std::string shutdown_msg = ":ircserv QUIT :Server shutting down by admin\r\n";
+	std::string shutdown_msg = ":ircserv QUIT :ircserv shutting down by admin\r\n";
 	queueMessageForAllClients(shutdown_msg);
 	flushAllClientBuffers();
 	closeAllSocketClient();
