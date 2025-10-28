@@ -34,8 +34,8 @@ bool	isClientToClientProtocol(const std::string& msg)
 {
 	if (msg.empty())
 		return (false);
-	std::string	prefix = "\\x01DCC ";
-	std::string	suffix = "\\x01";
+	std::string	prefix = "\x01" "DCC ";
+	std::string	suffix = "\x01";
 	bool	start = false;
 	bool	end = false;
 	if (msg.size() >= prefix.size())
@@ -69,11 +69,11 @@ std::string	extractMessageCTCP(const std::string& msg)
 {
 	if (isClientToClientProtocol(msg))
 	{
-		std::string	prefix = "\\x01DCC ";
-		std::string	suffix = "\\x01";
+		std::string	prefix = "\x01" "DCC ";
+		std::string	suffix = "\x01";
 		std::string	start = msg.substr(0, prefix.size());
 		std::string	end = msg.substr(msg.size() - suffix.size());
-		std::string	extracted_msg = msg.substr(prefix.size() - 4, (msg.size() - suffix.size() - 4));
+		std::string	extracted_msg = msg.substr(prefix.size(), msg.size() - prefix.size() - suffix.size());
 		return (extracted_msg);
 	}
 	std::string	result = "";
@@ -92,23 +92,23 @@ std::vector<std::string>	splitParams(const std::string& extracted_msg)
 
 bool	isValidDcc(const std::vector<std::string>& params, std::string& error_msg)
 {
-	if (params.size() != 6)
+	if (params.size() != 5)
 	{
-		error_msg = "Invalid DCC SEND format (expected 6 parameters)";
+		error_msg = "Invalid DCC SEND format (expected 5 parameters)";
 		return (false);
 	}
-	if (params[0] != "DCC" && params[1] != "SEND")
+	if (params[0] != "SEND")
 	{
 		error_msg = "Not a DCC SEND command";
 		return (false);
 	}
-	const std::string& filename = params[2];
+	const std::string& filename = params[1];
 	if (filename.find("..") != std::string::npos || filename.find("/") != std::string::npos || filename.find("\\") != std::string::npos)
 	{
 		error_msg = "Dangerous filename (path traversal attempt)";
 		return (false);
 	}
-	const std::string&	ip_str = params[3];
+	const std::string&	ip_str = params[2];
 	for (size_t i = 0; i < ip_str.length(); ++i)
 	{
 		if (!std::isdigit(ip_str[i]))
@@ -117,7 +117,7 @@ bool	isValidDcc(const std::vector<std::string>& params, std::string& error_msg)
 			return (false);
 		}
 	}
-	const std::string&	port_str = params[4];
+	const std::string&	port_str = params[3];
 	for (size_t i = 0; i < port_str.length(); ++i)
 	{
 		if (!std::isdigit(port_str[i]))
@@ -134,17 +134,12 @@ bool	isValidDcc(const std::vector<std::string>& params, std::string& error_msg)
 		error_msg = "Invalid port value";
 		return (false);
 	}
-	if (port < 0 || port > 65535)
+	if (port < 1024 || port > 65535)
 	{
 		error_msg = "Port value out of range (1024 - 65535)";
 		return (false);
 	}
-	if (port > 0 && port < 1024)
-	{
-		error_msg = "Privileged port not allowed";
-		return (false);
-	}
-	const std::string&	size_str = params[5];
+	const std::string&	size_str = params[4];
 	for (size_t i = 0; i < size_str.length(); ++i)
 	{
 		if (!std::isdigit(size_str[i]))
@@ -166,7 +161,7 @@ bool	isValidDcc(const std::vector<std::string>& params, std::string& error_msg)
 		error_msg = "File too large";
 		return (false);
 	}
-	std::cout << params[0] << std::endl << params[1] << std::endl << params[2] << std::endl << params[3] << std::endl << params[4] << std::endl << params[5] << std::endl;
+	std::cout << params[0] << std::endl << params[1] << std::endl << params[2] << std::endl << params[3] << std::endl << params[4] << std::endl;
 	return (true);
 }
 

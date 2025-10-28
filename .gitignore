@@ -1,0 +1,10 @@
+# Object files
+*.o
+
+# Binaries
+ircserv
+ircserv_bonus
+
+# Temporary files
+*.tmp
+*~
