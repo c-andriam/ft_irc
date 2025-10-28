@@ -216,7 +216,7 @@ void	Privmsg::execute(Client *client, const std::vector<std::string> &params)
 			std::string	extracted_msg = extractMessageCTCP(msg);
 			std::string	privmsg = ":" + client->_nickname + "!" + client->_username +
 			"@" + client->getHost() + " PRIVMSG " + target + " :" +
-			extracted_msg + "\r\n";
+			msg + "\r\n";
 			Client	*targetClient = _server->getClientByNick(target);
 			if (targetClient)
 				_server->sendMessageToClient(targetClient, privmsg);
