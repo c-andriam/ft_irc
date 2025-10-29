@@ -211,44 +211,29 @@ void	Privmsg::execute(Client *client, const std::vector<std::string> &params)
 	}
 	else
 	{
+		Client	*targetClient = _server->getClientByNick(target);
+		if (targetClient)
+		{
+			if (!isClientToClientProtocol(msg))
+				std::cout << "ATO" << std::endl;
+			_server->sendMessageToClient(targetClient, privmsg);
+		}
+		else
+		{
+			int	i = _server->getClientIndex(client);
+			if (i != -1)
+				_server->sendErrorMessage(i, ERR_NOSUCHNICK, "PRIVMSG",
+						target + " :No such nick/channel");
+		}
 		if (isClientToClientProtocol(msg))
 		{
 			std::string	extracted_msg = extractMessageCTCP(msg);
-			std::string	privmsg = ":" + client->_nickname + "!" + client->_username +
-			"@" + client->getHost() + " PRIVMSG " + target + " :" +
-			msg + "\r\n";
-			Client	*targetClient = _server->getClientByNick(target);
-			if (targetClient)
-				_server->sendMessageToClient(targetClient, privmsg);
-			else
-			{
-				int	i = _server->getClientIndex(client);
-				if (i != -1)
-					_server->sendErrorMessage(i, ERR_NOSUCHNICK, "PRIVMSG",
-							target + " :No such nick/channel");
-			}
 			//std::cout << "[" << extracted_msg << "]" << std::endl;
 			std::vector<std::string>	dcc = splitParams(extracted_msg);
 			std::string	error_msg;
 			if (isValidDcc(dcc, error_msg))
 			{
 				std::cout << "DCC SEND VALID" << std::endl;
-			}
-		}
-		else
-		{
-			Client	*targetClient = _server->getClientByNick(target);
-			if (targetClient)
-			{
-				std::cout << "ATO" << std::endl;
-				_server->sendMessageToClient(targetClient, privmsg);
-			}
-			else
-			{
-				int	i = _server->getClientIndex(client);
-				if (i != -1)
-					_server->sendErrorMessage(i, ERR_NOSUCHNICK, "PRIVMSG",
-							target + " :No such nick/channel");
 			}
 		}
 	}
